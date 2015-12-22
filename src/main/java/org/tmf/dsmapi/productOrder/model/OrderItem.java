@@ -96,7 +96,7 @@ public class OrderItem
      *     
      */
     @Basic
-    @Column(name = "ID", length = 255)
+    @Column(name = "ORDER_ITEM_ID", length = 255)
     public String getId() {
         return id;
     }
@@ -297,7 +297,8 @@ public class OrderItem
      *     {@link Long }
      *     
      */
-    @Id
+    
+     @Id
     @Column(name = "HJID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @org.codehaus.jackson.annotate.JsonIgnore

@@ -9,6 +9,7 @@
 package org.tmf.dsmapi.productOrder.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,27 +19,32 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.tmf.dsmapi.commons.utils.CustomJsonDateSerializer;
 
 
 /**
- * <p>Classe Java pour RelatedParty complex type.
+ * <p>Classe Java pour ValidFor complex type.
  * 
  * <p>Le fragment de schéma suivant indique le contenu attendu figurant dans cette classe.
  * 
  * <pre>
- * &lt;complexType name="RelatedParty">
+ * &lt;complexType name="ValidFor">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="role" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="href" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="startDateTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="endDateTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -48,30 +54,32 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RelatedParty", propOrder = {
-    "id",
-    "role",
-    "href",
-     "name"
+@XmlType(name = "ValidFor", propOrder = {
+    "startDateTime",
+    "endDateTime"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@Entity(name = "RelatedParty")
-@Table(name = "RELATED_PARTY")
+@Entity(name = "ValidFor")
+@Table(name = "VALID_FOR")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class RelatedParty
+public class ValidFor
     implements Serializable
 {
 
     private final static long serialVersionUID = 11L;
-    protected String id;
-    protected String role;
-    protected String href;
-     protected String name;
+    @XmlElement(type = String.class)
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
+    @XmlSchemaType(name = "dateTime")
+    protected Date startDateTime;
+    @XmlElement(type = String.class)
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
+    @XmlSchemaType(name = "dateTime")
+    protected Date endDateTime;
     @JsonIgnore
     protected Long hjid;
 
     /**
-     * Obtient la valeur de la propriété id.
+     * Obtient la valeur de la propriété startDateTime.
      * 
      * @return
      *     possible object is
@@ -79,25 +87,26 @@ public class RelatedParty
      *     
      */
     @Basic
-    @Column(name = "ID", length = 255)
-    public String getId() {
-        return id;
+    @Column(name = "START_DATE_TIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getStartDateTime() {
+        return startDateTime;
     }
 
     /**
-     * Définit la valeur de la propriété id.
+     * Définit la valeur de la propriété startDateTime.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setId(String value) {
-        this.id = value;
+    public void setStartDateTime(Date value) {
+        this.startDateTime = value;
     }
 
     /**
-     * Obtient la valeur de la propriété role.
+     * Obtient la valeur de la propriété endDateTime.
      * 
      * @return
      *     possible object is
@@ -105,47 +114,22 @@ public class RelatedParty
      *     
      */
     @Basic
-    @Column(name = "ROLE_", length = 255)
-    public String getRole() {
-        return role;
+    @Column(name = "END_DATE_TIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getEndDateTime() {
+        return endDateTime;
     }
 
     /**
-     * Définit la valeur de la propriété role.
+     * Définit la valeur de la propriété endDateTime.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setRole(String value) {
-        this.role = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété href.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    @Basic
-    @Column(name = "HREF", length = 255)
-    public String getHref() {
-        return href;
-    }
-
-    /**
-     * Définit la valeur de la propriété href.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHref(String value) {
-        this.href = value;
+    public void setEndDateTime(Date value) {
+        this.endDateTime = value;
     }
 
     /**
@@ -175,24 +159,5 @@ public class RelatedParty
     public void setHjid(Long value) {
         this.hjid = value;
     }
-    
-    @Basic
-    @Column(name = "NAME_", length = 255)
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
 
 }

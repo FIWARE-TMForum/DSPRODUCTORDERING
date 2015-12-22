@@ -27,18 +27,17 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 
 /**
- * <p>Classe Java pour RelatedParty complex type.
+ * <p>Classe Java pour Agreement complex type.
  * 
  * <p>Le fragment de schéma suivant indique le contenu attendu figurant dans cette classe.
  * 
  * <pre>
- * &lt;complexType name="RelatedParty">
+ * &lt;complexType name="Agreement">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="role" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="href" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="herf" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -48,25 +47,21 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RelatedParty", propOrder = {
+@XmlType(name = "Agreement", propOrder = {
     "id",
-    "role",
-    "href",
-     "name"
+    "herf"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@Entity(name = "RelatedParty")
-@Table(name = "RELATED_PARTY")
+@Entity(name = "Agreement")
+@Table(name = "AGREEMENT")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class RelatedParty
+public class Agreement
     implements Serializable
 {
 
     private final static long serialVersionUID = 11L;
     protected String id;
-    protected String role;
-    protected String href;
-     protected String name;
+    protected String herf;
     @JsonIgnore
     protected Long hjid;
 
@@ -97,7 +92,7 @@ public class RelatedParty
     }
 
     /**
-     * Obtient la valeur de la propriété role.
+     * Obtient la valeur de la propriété herf.
      * 
      * @return
      *     possible object is
@@ -105,47 +100,21 @@ public class RelatedParty
      *     
      */
     @Basic
-    @Column(name = "ROLE_", length = 255)
-    public String getRole() {
-        return role;
+    @Column(name = "HERF", length = 255)
+    public String getHerf() {
+        return herf;
     }
 
     /**
-     * Définit la valeur de la propriété role.
+     * Définit la valeur de la propriété herf.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setRole(String value) {
-        this.role = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété href.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    @Basic
-    @Column(name = "HREF", length = 255)
-    public String getHref() {
-        return href;
-    }
-
-    /**
-     * Définit la valeur de la propriété href.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHref(String value) {
-        this.href = value;
+    public void setHerf(String value) {
+        this.herf = value;
     }
 
     /**
@@ -175,24 +144,5 @@ public class RelatedParty
     public void setHjid(Long value) {
         this.hjid = value;
     }
-    
-    @Basic
-    @Column(name = "NAME_", length = 255)
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
 
 }

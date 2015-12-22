@@ -323,14 +323,14 @@ public class AdminResource {
         orderItem.setId("2");
         orderItem.setAction("modify");
         product = new Product();
-        l_ref = new ArrayList<Reference>();
-        ref = new Reference();
-        ref.setRole("user");
-        ref.setId("5667443");
-        ref.setHref("http://serverlocation:port/partyManagement/user/5667443");
-        ref.setName("Jimmy Doe");
-        l_ref.add(ref);
-        product.setRelatedParty(l_ref);
+        ArrayList<RelatedParty> l_ref2 = new ArrayList<>();
+        RelatedParty ref2 = new RelatedParty();
+        ref2.setRole("user");
+        ref2.setId("5667443");
+        ref2.setHref("http://serverlocation:port/partyManagement/user/5667443");
+       
+        l_ref2.add(ref2);
+        product.setRelatedParty(l_ref2);
         product.setId("456");
         product.setHref("http://serverlocation:port/inventoryManagement/product/456");
         orderItem.setProduct(product);

@@ -27,18 +27,17 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 
 /**
- * <p>Classe Java pour RelatedParty complex type.
+ * <p>Classe Java pour Price complex type.
  * 
  * <p>Le fragment de schéma suivant indique le contenu attendu figurant dans cette classe.
  * 
  * <pre>
- * &lt;complexType name="RelatedParty">
+ * &lt;complexType name="Price">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="role" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="href" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="amount" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+ *         &lt;element name="currency" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -48,30 +47,52 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RelatedParty", propOrder = {
-    "id",
-    "role",
-    "href",
-     "name"
+@XmlType(name = "Price", propOrder = {
+    "amount",
+    "currency"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@Entity(name = "RelatedParty")
-@Table(name = "RELATED_PARTY")
+@Entity(name = "Price")
+@Table(name = "PRICE")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class RelatedParty
+public class Price
     implements Serializable
 {
 
     private final static long serialVersionUID = 11L;
-    protected String id;
-    protected String role;
-    protected String href;
-     protected String name;
+    protected Float amount;
+    protected String currency;
     @JsonIgnore
     protected Long hjid;
 
     /**
-     * Obtient la valeur de la propriété id.
+     * Obtient la valeur de la propriété amount.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Float }
+     *     
+     */
+    @Basic
+    @Column(name = "AMOUNT", precision = 20, scale = 10)
+    public Float getAmount() {
+        return amount;
+    }
+
+    /**
+     * Définit la valeur de la propriété amount.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Float }
+     *     
+     */
+    public void setAmount(Float value) {
+        this.amount = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété currency.
      * 
      * @return
      *     possible object is
@@ -79,73 +100,21 @@ public class RelatedParty
      *     
      */
     @Basic
-    @Column(name = "ID", length = 255)
-    public String getId() {
-        return id;
+    @Column(name = "CURRENCY", length = 255)
+    public String getCurrency() {
+        return currency;
     }
 
     /**
-     * Définit la valeur de la propriété id.
+     * Définit la valeur de la propriété currency.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setId(String value) {
-        this.id = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété role.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    @Basic
-    @Column(name = "ROLE_", length = 255)
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Définit la valeur de la propriété role.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRole(String value) {
-        this.role = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété href.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    @Basic
-    @Column(name = "HREF", length = 255)
-    public String getHref() {
-        return href;
-    }
-
-    /**
-     * Définit la valeur de la propriété href.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHref(String value) {
-        this.href = value;
+    public void setCurrency(String value) {
+        this.currency = value;
     }
 
     /**
@@ -175,24 +144,5 @@ public class RelatedParty
     public void setHjid(Long value) {
         this.hjid = value;
     }
-    
-    @Basic
-    @Column(name = "NAME_", length = 255)
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
 
 }

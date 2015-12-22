@@ -27,17 +27,16 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 
 /**
- * <p>Classe Java pour RelatedParty complex type.
+ * <p>Classe Java pour RealizingService complex type.
  * 
  * <p>Le fragment de schéma suivant indique le contenu attendu figurant dans cette classe.
  * 
  * <pre>
- * &lt;complexType name="RelatedParty">
+ * &lt;complexType name="RealizingService">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="role" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="href" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -48,25 +47,21 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RelatedParty", propOrder = {
+@XmlType(name = "RealizingService", propOrder = {
     "id",
-    "role",
-    "href",
-     "name"
+    "href"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@Entity(name = "RelatedParty")
-@Table(name = "RELATED_PARTY")
+@Entity(name = "RealizingService")
+@Table(name = "REALIZING_SERVICE")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class RelatedParty
+public class RealizingService
     implements Serializable
 {
 
     private final static long serialVersionUID = 11L;
     protected String id;
-    protected String role;
     protected String href;
-     protected String name;
     @JsonIgnore
     protected Long hjid;
 
@@ -94,32 +89,6 @@ public class RelatedParty
      */
     public void setId(String value) {
         this.id = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété role.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    @Basic
-    @Column(name = "ROLE_", length = 255)
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Définit la valeur de la propriété role.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRole(String value) {
-        this.role = value;
     }
 
     /**
@@ -175,24 +144,5 @@ public class RelatedParty
     public void setHjid(Long value) {
         this.hjid = value;
     }
-    
-    @Basic
-    @Column(name = "NAME_", length = 255)
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
 
 }

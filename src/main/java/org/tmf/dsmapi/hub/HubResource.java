@@ -166,15 +166,7 @@ public class HubResource {
         orderItem.setId("2");
         orderItem.setAction("modify");
         product = new Product();
-        l_ref = new ArrayList<Reference>();
-        ref = new Reference();
-        ref.setRole("user");
-        ref.setId("5667443");
-        ref.setHref("http://serverlocation:port/partyManagement/user/5667443");
-        ref.setName("Jimmy Doe");
-        l_ref.add(ref);
-        product.setRelatedParty(l_ref);
-        product.setId("456");
+       
         product.setHref("http://serverlocation:port/inventoryManagement/product/456");
         orderItem.setProduct(product);
         l_orderItem.add(orderItem);
