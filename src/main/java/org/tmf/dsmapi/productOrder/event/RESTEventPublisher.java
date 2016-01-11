@@ -42,6 +42,7 @@ public class RESTEventPublisher implements RESTEventPublisherLocal {
                 fieldSet.add("reason");
                 ObjectNode rootNode = Jackson.createNode(event, fieldSet);
                 client.publishEvent(hub.getCallback(), rootNode);
+                
             } else {
                 client.publishEvent(hub.getCallback(), event);
             }

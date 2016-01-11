@@ -17,6 +17,7 @@ public class JacksonConfigurator implements ContextResolver<ObjectMapper> {
         mapper.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
         mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
+        
     }
 
     @Override

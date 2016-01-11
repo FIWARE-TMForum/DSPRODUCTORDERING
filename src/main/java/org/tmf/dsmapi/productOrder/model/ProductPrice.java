@@ -63,7 +63,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
     "recurringChargePeriod",
     "unitOfMeasure",
     "price",
-    "validFor"
+    "validFor",
+    "hjid"
+    
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity(name = "ProductPrice")

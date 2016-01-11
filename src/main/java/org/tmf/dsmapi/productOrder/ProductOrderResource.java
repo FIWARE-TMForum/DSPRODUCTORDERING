@@ -42,6 +42,10 @@ public class ProductOrderResource {
     EventFacade eventFacade;
     @EJB
     EventPublisherLocal publisher;
+    @EJB
+    UpdateInventoryLocal inventoryUpdater;
+    
+    
 
     public ProductOrderResource() {
     }
@@ -58,6 +62,7 @@ public class ProductOrderResource {
         entity.setHref(info.getAbsolutePath()+ "/" + Long.toString(entity.getId()));
         productOrderingManagementFacade.edit(entity);
         publisher.createNotification(entity, new Date());
+       
         
         ProductOrder productOrderingManagement = null;
         // 201 BUG NEED TO REFIND TO IGNORE HJID UNKNOWN CAUSE

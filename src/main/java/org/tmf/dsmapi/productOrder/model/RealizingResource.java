@@ -49,7 +49,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RealizingResource", propOrder = {
     "id",
-    "href"
+    "href",
+    "hjid"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity(name = "RealizingResource")

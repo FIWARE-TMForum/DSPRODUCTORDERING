@@ -52,7 +52,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
     "id",
     "role",
     "href",
-     "name"
+     "name",
+     "hjid"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity(name = "RelatedParty")

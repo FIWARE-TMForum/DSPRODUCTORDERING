@@ -79,6 +79,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -126,6 +127,7 @@ import org.tmf.dsmapi.commons.utils.CustomJsonDateSerializer;
  * 
  * 
  */
+@XmlRootElement 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Product", propOrder = {
     "id",
@@ -149,7 +151,9 @@ import org.tmf.dsmapi.commons.utils.CustomJsonDateSerializer;
     "realizingResource",
     "realizingService",
     "productPrice",
-    "agreement"
+    "agreement",
+    "hjid",
+    "idx"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity(name = "Product")

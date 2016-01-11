@@ -56,7 +56,8 @@ import org.tmf.dsmapi.commons.utils.CustomJsonDateSerializer;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ValidFor", propOrder = {
     "startDateTime",
-    "endDateTime"
+    "endDateTime",
+    "hjid"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity(name = "ValidFor")

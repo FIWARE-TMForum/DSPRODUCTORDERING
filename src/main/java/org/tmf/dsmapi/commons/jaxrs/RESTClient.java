@@ -7,6 +7,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -27,13 +28,18 @@ public class RESTClient {
     WebTarget webResource = getWebResource(callbackURL);
     Entity entity = Entity.entity(requestEntity, MediaType.APPLICATION_JSON);
     try {
-      webResource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(entity);
+      System.out.println("about to POST " + requestEntity);
+        Response resp = webResource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(entity);
+       System.out.println("POST STATUS" + resp.getStatus());
+        System.out.println("POST RESPONSE" + resp.getEntity().toString());
     } catch (Exception e) {
+      System.out.println("POST ERROR" + e.getMessage());
       e.printStackTrace();
     }
+     System.out.println("POST SUCCESSFULL");
   }
 
-  public void publishEvent(String callbackURL, ObjectNode node) {
+/*  public void publishEvent(String callbackURL, ObjectNode node) {
     System.out.println("publishEvent " + node);
     WebTarget webResource = getWebResource(callbackURL);
     Entity entity = Entity.entity(node, MediaType.APPLICATION_JSON);
@@ -43,6 +49,7 @@ public class RESTClient {
       e.printStackTrace();
     }
   }
+  */
 
    private Client getJaxrsClient() {
         if (jaxrsClient == null) {

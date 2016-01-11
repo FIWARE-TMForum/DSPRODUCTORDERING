@@ -49,7 +49,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Price", propOrder = {
     "amount",
-    "currency"
+    "currency",
+    "hjid"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity(name = "Price")

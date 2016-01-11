@@ -1,5 +1,6 @@
 package org.tmf.dsmapi.productOrder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -15,8 +16,11 @@ import org.tmf.dsmapi.commons.facade.AbstractFacade;
 import org.tmf.dsmapi.commons.utils.BeanUtils;
 import org.tmf.dsmapi.commons.utils.TMFDate;
 import org.tmf.dsmapi.productOrder.event.EventPublisherLocal;
+import org.tmf.dsmapi.productOrder.model.BillingAccount;
 import org.tmf.dsmapi.productOrder.model.Note;
 import org.tmf.dsmapi.productOrder.model.OrderItem;
+import org.tmf.dsmapi.productOrder.model.Product;
+import org.tmf.dsmapi.productOrder.model.ProductCharacteristic;
 import org.tmf.dsmapi.productOrder.model.ProductOrder;
 import org.tmf.dsmapi.productOrder.model.Reference;
 import org.tmf.dsmapi.productOrder.model.State;
@@ -32,6 +36,8 @@ public class ProductOrderFacade extends AbstractFacade<ProductOrder> {
     private EntityManager em;
     @EJB
     EventPublisherLocal publisher;
+      @EJB
+    UpdateInventoryLocal inventoryUpdater;
     StateModelImpl stateModel = new StateModelImpl();
 
     public ProductOrderFacade() {
@@ -178,6 +184,7 @@ public class ProductOrderFacade extends AbstractFacade<ProductOrder> {
 
     public ProductOrder patchAttributs(long id, ProductOrder partialProduct) throws UnknownResourceException, BadUsageException {
         ProductOrder currentProduct = this.find(id);
+        if (null != partialProduct.getState()) System.out.println("PATCHING STATE !!!");
 
         if (currentProduct == null) {
             throw new UnknownResourceException(ExceptionType.UNKNOWN_RESOURCE);
@@ -253,6 +260,67 @@ public class ProductOrderFacade extends AbstractFacade<ProductOrder> {
                     if (null != orderItem.getAction()) {
                        // throw new BadUsageException(ExceptionType.BAD_USAGE_OPERATOR, "orderItem.action not patchable");
                     }
+                    
+                    if (null != orderItem.getState()) {
+                       //check if this is complete
+                        if (orderItem.getState().name().equalsIgnoreCase(State.Completed.name())) {
+                             Product product = orderItem.getProduct();
+                             boolean prodductOfferingFlag = (orderItem.getProductOffering()!= null);
+                             boolean prodductBillingFlag = (orderItem.getBillingAccount()!= null);
+                             
+                             if(prodductOfferingFlag ) 
+                                product.setProductOffering(orderItem.getProductOffering());
+                            if(prodductBillingFlag ) {
+                                 
+                                 List<BillingAccount> bacList =new ArrayList<BillingAccount>();
+                                 List<Reference> bac = orderItem.getBillingAccount();
+                                for (Reference reference : bac) {
+                                    
+                                    String href =reference.getHref();
+                                    String idr   = reference.getId();
+                                    BillingAccount newbac = new BillingAccount();
+                                    newbac.setHref(href);
+                                    newbac.setId(idr);
+                                    bacList.add(newbac);
+                                    
+                                }
+                                 product.setBillingAccount( bacList );
+                             }
+                                
+                                 product.setOrderDate(partialProduct.getOrderDate());
+                                 /*List<ProductCharacteristic> pcs = product.getProductCharacteristic();
+                                 if(partialProduct.getExternalId()!=null) {
+                                     ProductCharacteristic pc = new ProductCharacteristic();
+                                     pc.setName("externalOrderId");
+                                     pc.setValue(partialProduct.getExternalId());
+                                     pcs.add(pc);
+                                 }
+                                  if(partialProduct.getId()!=null) {
+                                     ProductCharacteristic pc = new ProductCharacteristic();
+                                     pc.setName("orderId");
+                                     pc.setValue(partialProduct.getId().toString());
+                                     pcs.add(pc);
+                                 }
+                                   if(orderItem.getId()!=null) {
+                                     ProductCharacteristic pc = new ProductCharacteristic();
+                                     pc.setName("orderItemId");
+                                     pc.setValue(orderItem.getId().toString());
+                                     pcs.add(pc);
+                                 } */
+                                 
+                              String name = orderItem.getProduct().getName();
+                              if(name==null) name ="";
+                              product.setName(name + " oid=" + id);
+                              inventoryUpdater.addToInventory( product );
+                              if(!prodductOfferingFlag ) orderItem.getProduct().setProductOffering(null);
+                              if(!prodductBillingFlag ) orderItem.getProduct().setBillingAccount(null);
+                             
+                             
+                        }
+                    }
+                    
+                   
+                    
                     if (null != partialProduct.getState()) {
                         if (null != orderItem.getBillingAccount()
                                 && !orderItem.getBillingAccount().isEmpty()) {
@@ -312,15 +380,7 @@ public class ProductOrderFacade extends AbstractFacade<ProductOrder> {
             }
         }
 
-        if (null != partialProduct.getState()) {
-            stateModel.checkTransition(currentProduct.getState(), partialProduct.getState());
-            System.out.println("About to publish statusChangedNotification ");
-
-            publisher.stateChangeNotification(currentProduct, new Date());
-        } else {
-            System.out.println("No State detectd ");
-            //throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "state" + " is not found");
-        }
+       
 
         partialProduct.setId(id);
 
@@ -329,6 +389,34 @@ public class ProductOrderFacade extends AbstractFacade<ProductOrder> {
         if (BeanUtils.patch(currentProduct, partialProduct, node)) {
             publisher.valueChangeNotification(currentProduct, new Date());
         }
+        
+         if (null != partialProduct.getState()) {
+            stateModel.checkTransition(currentProduct.getState(), partialProduct.getState());
+            System.out.println("About to publish statusChangedNotification ");
+            
+            //if the patch is on the order state to complete (in fiware ) we will add
+            //ordeitem products to inventory
+            
+           
+
+            publisher.stateChangeNotification(currentProduct, new Date());
+        } else {
+            System.out.println("No State detectd ");
+            //throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "state" + " is not found");
+        }
+         
+       
+        
+        //to do check all order items if they are in final state then put the order in complete 
+        //or failed
+        
+        //need to check if inventory is synced wih the ordering (duplicates)
+        //otherwise just chekc for a deltabetween current order order item state and patched 
+        //orderitem
+        //if delta is complete push the associated product definition in inventory
+        
+       
+        
         return currentProduct;
     }
 }

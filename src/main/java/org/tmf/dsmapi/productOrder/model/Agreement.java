@@ -49,7 +49,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Agreement", propOrder = {
     "id",
-    "herf"
+    "herf",
+    "hjid"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity(name = "Agreement")

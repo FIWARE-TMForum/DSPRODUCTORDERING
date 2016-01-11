@@ -55,7 +55,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @XmlType(name = "ProductOffering", propOrder = {
     "id",
     "href",
-    "bundledProductOffering"
+    "bundledProductOffering",
+    "hjid"
 })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity(name = "ProductOffering")
@@ -150,6 +151,7 @@ public class ProductOffering
         CascadeType.ALL
     })
     @JoinColumn(name = "BUNDLED_PRODUCT_OFFERING_PRO_0")
+    @org.codehaus.jackson.annotate.JsonIgnore
     public List<Reference> getBundledProductOffering() {
         if (bundledProductOffering == null) {
             bundledProductOffering = new ArrayList<Reference>();
