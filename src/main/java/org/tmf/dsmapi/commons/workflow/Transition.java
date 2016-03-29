@@ -33,74 +33,14 @@ public class Transition<E extends Enum<E>> implements Serializable, Cloneable{
      * @param e1
      * @return
      */
-    public Transition to(E e1) {
-        to = noneOf(e1.getDeclaringClass());
-        to.add(e1);
+    public Transition to(E... es) {
+        to = noneOf(es[0].getDeclaringClass());
+        
+        for (E e: es) {
+            to.add(e);
+        }
+        
         return this;
-    }
-    
-    /**
-     *
-     * @param e1
-     * @param e2
-     * @return
-     */
-    public Transition to(E e1, E e2) {
-        to = noneOf(e1.getDeclaringClass());        
-        to.add(e1);
-        to.add(e2);
-        return this;        
-    }
-    
-    /**
-     *
-     * @param e1
-     * @param e2
-     * @param e3
-     * @return
-     */
-    public Transition to(E e1, E e2, E e3) {
-        to = noneOf(e1.getDeclaringClass());        
-        to.add(e1);
-        to.add(e2);
-        to.add(e3);
-        return this;        
-    }
-    
-    /**
-     *
-     * @param e1
-     * @param e2
-     * @param e3
-     * @param e4
-     * @return
-     */
-    public Transition to(E e1, E e2, E e3, E e4) {
-        to = noneOf(e1.getDeclaringClass());        
-        to.add(e1);
-        to.add(e2);
-        to.add(e3);
-        to.add(e4); 
-        return this;        
-    }
-    
-    /**
-     *
-     * @param e1
-     * @param e2
-     * @param e3
-     * @param e4
-     * @param e5
-     * @return
-     */
-    public Transition to(E e1, E e2, E e3, E e4, E e5) {
-        to = noneOf(e1.getDeclaringClass());        
-        to.add(e1);
-        to.add(e2);
-        to.add(e3);
-        to.add(e4);
-        to.add(e5);  
-        return this;        
     }
 
     /**

@@ -34,7 +34,8 @@ public class StateModelImpl extends StateModelBase<State> {
                 State.Pending,
                 State.Partial,
                 State.Failed,
-                State.Completed);       
+                State.Completed,
+                State.Cancelled);       
         from(State.Held).to(
                 State.InProgress,
                 State.Cancelled);
