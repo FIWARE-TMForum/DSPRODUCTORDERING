@@ -38,7 +38,8 @@ public class ProductOrderFacade extends AbstractFacade<ProductOrder> {
     private EntityManager em;
     @EJB
     EventPublisherLocal publisher;
-      @EJB
+
+    @EJB
     UpdateInventoryLocal inventoryUpdater;
     StateModelImpl stateModel = new StateModelImpl();
 
@@ -257,8 +258,20 @@ public class ProductOrderFacade extends AbstractFacade<ProductOrder> {
 
         if (null != partialProduct.getOrderItem()
                 && !partialProduct.getOrderItem().isEmpty()) {
-            
+
+            // Save the already completed order items, in order to avoid multiple
+            // products created in the inventory
+            List<OrderItem> prevItems = currentProduct.getOrderItem();
+            List<String> completedItems = new ArrayList();
+
+            for (OrderItem item: prevItems) {
+                if (item.getState().name().equalsIgnoreCase(State.Completed.name())) {
+                    completedItems.add(item.getId());
+                }
+            }
+
             List<OrderItem> l_orderItem = partialProduct.getOrderItem();
+
             for (OrderItem orderItem : l_orderItem) {
 //                if (null != orderItem.getId()) {
 //                   throw new BadUsageException(ExceptionType.BAD_USAGE_OPERATOR, "orderItem.id not patchable");
@@ -272,7 +285,8 @@ public class ProductOrderFacade extends AbstractFacade<ProductOrder> {
                 if (null != orderItem.getState()) {
                     
                     //check if this is complete so the product is added to the inventory
-                    if (orderItem.getState().name().equalsIgnoreCase(State.Completed.name())) {
+                    if (orderItem.getState().name().equalsIgnoreCase(State.Completed.name())
+                            && !completedItems.contains(orderItem.getId())) {
                          
                         Product product = orderItem.getProduct();
                         boolean prodductOfferingFlag = (orderItem.getProductOffering() != null);
