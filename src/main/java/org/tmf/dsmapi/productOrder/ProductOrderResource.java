@@ -1,5 +1,7 @@
 package org.tmf.dsmapi.productOrder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
@@ -83,14 +86,22 @@ public class ProductOrderResource {
         MultivaluedMap<String, String> queryParameters = info.getQueryParameters();
 
         Map<String, List<String>> mutableMap = new HashMap();
-        for (Map.Entry<String, List<String>> e : queryParameters.entrySet()) {
+        queryParameters.entrySet().stream().forEach((e) -> {
             mutableMap.put(e.getKey(), e.getValue());
-        }
+        });
 
         // fields to filter view
         Set<String> fieldSet = URIParser.getFieldsSelection(mutableMap);
 
-        Set<ProductOrder> resultList = findByCriteria(mutableMap);
+        List<ProductOrder> resultList = findByCriteria(mutableMap);
+
+        // If the ids has been specify, return the orders in the provided one
+        if (queryParameters.containsKey("id")) {
+            String[] idValues = queryParameters.get("id").get(0).split(",");
+
+            List<String> ids = Arrays.asList(idValues);
+            resultList = sortByIds(resultList, ids);
+        }
 
         Response response;
         if (fieldSet.isEmpty() || fieldSet.contains(URIParser.ALL_FIELDS)) {
@@ -103,20 +114,26 @@ public class ProductOrderResource {
         return response;
     }
 
-    // return Set of unique elements to avoid List with same elements in case of join
-    private Set<ProductOrder> findByCriteria(Map<String, List<String>> criteria) throws BadUsageException {
+    private List<ProductOrder> sortByIds (List<ProductOrder> orders, List<String> ids) {
+        return orders.stream()
+                .sorted((e1, e2) ->
+                        Integer.compare(ids.indexOf(e1.getId().toString()), ids.indexOf(e2.getId().toString())))
+                .collect(Collectors.toList());
+    }
 
-        List<ProductOrder> resultList = null;
+    // return Set of unique elements to avoid List with same elements in case of join
+    private List<ProductOrder> findByCriteria(Map<String, List<String>> criteria) throws BadUsageException {
+
+        List<ProductOrder> resultList;
         if (criteria != null && !criteria.isEmpty()) {
             resultList = productOrderingManagementFacade.findByCriteria(criteria, ProductOrder.class);
         } else {
             resultList = productOrderingManagementFacade.findAll();
         }
         if (resultList == null) {
-            return new LinkedHashSet<ProductOrder>();
-        } else {
-            return new LinkedHashSet<ProductOrder>(resultList);
+            resultList = new ArrayList<>();
         }
+        return resultList;
     }
 
     @GET
